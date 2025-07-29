@@ -100,6 +100,9 @@ ingress:
 ### Instalación con valores personalizados
 
 ```bash
+# Desinstalar el release anterior con valores por defecto
+helm uninstall demo-nginx
+
 # Instalar con archivo de valores personalizado
 helm install demo-nginx ./demo-chart -f my-values.yaml
 
@@ -162,27 +165,7 @@ Si tienes el Ingress habilitado con `demo.local`:
 kubectl port-forward service/demo-nginx-demo-chart 8080:80
 # Acceder en: http://localhost:8080
 
-```
-
-#### Con NodePort
-
-```bash
-# Obtener el puerto asignado
-kubectl get service demo-nginx-demo-chart
-# Acceder en: http://localhost:<NODEPORT>
-
-```
-
-#### Con LoadBalancer
-
-```bash
-# Obtener la IP externa (puede tardar unos minutos)
-kubectl get service demo-nginx-demo-chart
-# Acceder usando la EXTERNAL-IP
-
-```
-
-    
+```   
 
 ### Limpieza completa
 
