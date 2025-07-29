@@ -159,7 +159,7 @@ Si tienes el Ingress habilitado con `demo.local`:
 #### Con ClusterIP (port-forward)
 
 ```bash
-kubectl port-forward service/demo-nginx 8080:80
+kubectl port-forward service/demo-nginx-demo-chart 8080:80
 # Acceder en: http://localhost:8080
 
 ```
@@ -168,7 +168,7 @@ kubectl port-forward service/demo-nginx 8080:80
 
 ```bash
 # Obtener el puerto asignado
-kubectl get service demo-nginx
+kubectl get service demo-nginx-demo-chart
 # Acceder en: http://localhost:<NODEPORT>
 
 ```
@@ -177,7 +177,7 @@ kubectl get service demo-nginx
 
 ```bash
 # Obtener la IP externa (puede tardar unos minutos)
-kubectl get service demo-nginx
+kubectl get service demo-nginx-demo-chart
 # Acceder usando la EXTERNAL-IP
 
 ```
