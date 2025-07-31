@@ -1,0 +1,16 @@
+# Archivos de estado y backups de Terraform
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Archivos de lock temporales
+*.lock.info
+
+# Carpeta de plugins y caché
+.terraform/
+# Puede o no versionarse
+.terraform.lock.hcl
+
+# Variables con secrets (opcional)
+terraform.tfvars
+*.auto.tfvars

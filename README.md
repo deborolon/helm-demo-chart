@@ -1,175 +1,84 @@
-# Demo Chart - Helm NGINX Deployment
-
-Helm Chart personalizado para desplegar NGINX con configuraciones parametrizables.
+# Despliegue de Helm Chart con Terraform
 
 ## Prerrequisitos
 
--   [**Docker Desktop con Kubernetes habilitado**](https://docs.docker.com/desktop/features/kubernetes/)
--   **Helm 3.x** instalado
--   **kubectl** configurado para conectar al cluster
+### Instalación de Terraform en Windows con Chocolatey
 
-### Verificar prerrequisitos
+#### 1. Instalar Chocolatey
 
-```bash
-# Verificar que Kubernetes esté funcionando
-kubectl cluster-info
-
-# Versión de Helm
-helm version
-
-```
-
-## Instalación
-
-### 1. Clonar el repositorio
-
-```bash
-git clone https://github.com/deborolon/helm-demo-chart.git
-cd helm-demo-chart
-
-```
-
-### 2. Validar el Chart
-
-Antes de instalar, validar que el chart esté correctamente estructurado:
-
-```bash
-# Validar sintaxis y estructura del chart
-helm lint ./demo-chart
-```
-
-### 3. Instalación con valores por defecto
-
-```bash
-# Se instala el chart con configuración por defecto
-helm install demo-nginx ./demo-chart
-
-# Verificar el estado de la instalación
-helm status demo-nginx
-
-# Ver los pods creados
-kubectl get pods
-
-```
-
-## Configuración personalizada
-
-
-### Valores configurables
-
-  
-El chart permite personalizar los siguientes valores en `values.yaml`:
-
-  
-
-| Parámetro | Descripción | Valor por defecto |
-|-----------|-------------|-------------------|
-| `image.repository` | Repositorio de la imagen | `nginx` |
-| `image.tag` | Tag de la imagen | `alpine` |
-| `image.pullPolicy` | Política de descarga de imagen | `IfNotPresent` |
-| `replicaCount` | Número de réplicas | `2` |
-| `service.type` | Tipo de servicio (ClusterIP/NodePort/LoadBalancer) | `ClusterIP` |
-| `service.port` | Puerto del servicio | `80` |
-| `ingress.enabled` | Habilitar Ingress | `false` |
-| `ingress.host` | Host del Ingress | `demo.local` |
-
-
-### Archivo de valores personalizado
-
-Crear un archivo `my-values.yaml`:
-
-```yaml
-# my-values.yaml
-image:
-  repository: nginx
-  tag: "1.21"
-  pullPolicy: IfNotPresent
-
-replicaCount: 3
-
-service:
-  type: LoadBalancer
-  port: 80
-
-ingress:
-  enabled: true
-  host: demo.local
-
-```
-
-### Instalación con valores personalizados
-
-```bash
-# Desinstalar el release anterior con valores por defecto
-helm uninstall demo-nginx
-
-# Instalar con archivo de valores personalizado
-helm install demo-nginx ./demo-chart -f my-values.yaml
-
-# Para sobreescribir valores específicos desde línea de comandos
-helm install demo-nginx ./demo-chart --set replicaCount=3 --set service.type=NodePort
-
-```
-
-## Comandos útiles para pruebas
-
-### Gestión del release
-
-```bash
-# Listar todos los releases
-helm list
-
-# Ver el estado detallado
-helm status demo-nginx
-
-# Actualizar el release con nuevos valores
-helm upgrade demo-nginx ./demo-chart -f my-values.yaml
-
-# Desinstalar el release
-helm uninstall demo-nginx
-
-```
-
-## Acceso a la aplicación
-
-### Acceso local con Ingress
-
-Si tienes el Ingress habilitado con `demo.local`:
-
-1.  **Agregar entrada al archivo hosts**:
+1.  Abre PowerShell como **Administrador**
+2.  Ejecuta el siguiente comando para verificar la política de ejecución:
     
-    ```bash    
-    # En Windows (como Administrador)
-    echo 127.0.0.1 demo.local >> C:\Windows\System32\drivers\etc\hosts
-    
+    ```powershell
+    Get-ExecutionPolicy
     ```
     
-2.  **Verificar que el Ingress Controller esté funcionando**:
+3.  Si la política es `Restricted`, cámbiala temporalmente:
     
-    ```bash
-    kubectl get pods -n ingress-nginx  # Para nginx-ingress    
+    ```powershell
+    Set-ExecutionPolicy AllSigned
     ```
     
-3.  **Acceder a la aplicación**:
+4.  Instala Chocolatey:
     
-    ```
-    http://demo.local
+    ```powershell
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
     ```
     
 
-### Acceso sin Ingress
+#### 2. Instalar Terraform
 
-#### Con ClusterIP (port-forward)
+Una vez que tengas Chocolatey instalado:
+
+```powershell
+choco install terraform
+```
+
+#### 3. Verificar la instalación
+
+```powershell
+terraform --version
+```
+
+## Estructura del proyecto
+
+```
+proyecto-terraform/
+├── README.md
+├── main.tf
+├── variables.tf
+├── outputs.tf
+├── terraform.tfvars
+└── .gitignore
+```
+
+## Paso a paso
+
+### 1. Preparación del entorno
+
+1.  Clona o descarga este repositorio
+2.  Abre una terminal en el directorio del proyecto
+
+### 2. Inicialización
 
 ```bash
-kubectl port-forward service/demo-nginx-demo-chart 8080:80
-# Acceder en: http://localhost:8080
+terraform init
+```
 
-```   
-
-### Limpieza completa
+### 3. Planificación
 
 ```bash
-# Desinstalar el release
-helm uninstall demo-nginx
+terraform plan
+```
+
+### 4. Aplicación
+
+```bash
+terraform apply
+```
+
+### 5. Limpieza
+
+```bash
+terraform destroy
 ```
